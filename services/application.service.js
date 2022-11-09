@@ -2,8 +2,20 @@ const {Applicant} = require('../dataBase')
 
 module.exports = {
 
+    getApplications() {
+        return Applicant.find();
+    },
+
     getApplicationById(filter = {}) {
         return Applicant.findById(filter);
+    },
+
+    getApplicationByParams(filter = {}) {
+        return Applicant.findOne(filter);
+    },
+
+    getApplicationsByParams(filter = {}) {
+        return Applicant.find(filter);
     },
 
     createApplication(applicationObject) {
@@ -11,14 +23,11 @@ module.exports = {
     },
 
     updateApplicationById(application_Id, newApplicationObject) {
-        return Applicant.updateOne({_id: application_Id}, newApplicationObject, {new: true});
+        return Applicant.findOneAndUpdate({_id: application_Id}, newApplicationObject, {new: true});
     },
 
     deleteApplicationById(application_id) {
-        return Applicant.deleteOne({_id: application_id});
-    },
-
-    getApplicationByParams(filter = {}) {
-        return Applicant.findOne(filter);
+        return Applicant.findByIdAndDelete({_id: application_id});
     }
+
 }

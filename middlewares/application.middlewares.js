@@ -18,10 +18,9 @@ module.exports = {
 
     isApplicationBodyValid: (validatorType) => async (req, res, next) => {
         try {
-            console.log(req.query);
             const validate = applicationValidators[validatorType].validate(req.body);
             if (validate.error) {
-                return next(new ApiError(validate.error.details[0].message, 400))
+                return next(new ApiError(validate.error.message, 400));
             }
 
             next();

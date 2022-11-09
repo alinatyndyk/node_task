@@ -1,3 +1,4 @@
 module.exports = {
-    applicationValidators: require('./application.validators')
+    applicationValidators: require('./application.validators'),
+    positionValidators: require('./position.validators')
 }

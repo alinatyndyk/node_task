@@ -1,8 +1,8 @@
 const Position = require('../dataBase/Position')
 
 module.exports = {
-    getPositions(filter = {}) {
-        return Position.find(filter);
+    getPositions() {
+        return Position.find();
     },
 
     getPositionById(filter = {}) {
@@ -22,6 +22,14 @@ module.exports = {
     },
 
     deletePositionById(position_id) {
-        return Position.deleteOne({_id: position_id});
+        return Position.findByIdAndDelete({_id: position_id});
+    },
+
+    searchPositionByDescription(key) {
+        return Position.find({
+            "$or": [
+                {description: {$regex: key}}
+            ]
+        });
     }
 }

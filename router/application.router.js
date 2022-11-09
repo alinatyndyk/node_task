@@ -5,6 +5,10 @@ const {applicationMldwr, commonMldwr} = require("../middlewares");
 
 const applicationRouter = Router();
 
+applicationRouter.get('/',
+    applicationController.getApplications
+)
+
 applicationRouter.get('/:application_id',
     commonMldwr.validIdMiddleware('_id'),
     applicationController.getApplicationById
@@ -17,15 +21,15 @@ applicationRouter.post('/',
 )
 
 applicationRouter.put('/:application_id',
+    commonMldwr.validIdMiddleware('_id'),
     applicationMldwr.isApplicationBodyValid('applicantBodyValidator'),
     applicationController.updateApplicationById
 )
 
 applicationRouter.delete('/:application_id',
+    commonMldwr.validIdMiddleware('_id'),
     applicationController.deleteApplicationById
 )
-
-//todo common mldwr id check
 
 module.exports =
     applicationRouter
