@@ -2,7 +2,6 @@ const {positionService, applicationService} = require("../services");
 const {sendEmail} = require("../services/mailer.service");
 const {DELETED_POSITION, ADDED_POSITION} = require("../constants/email.action.enum");
 const {NEW_POSITION_URL} = require("../configs/configs");
-const {boolean} = require("joi");
 
 module.exports = {
 
@@ -32,20 +31,32 @@ module.exports = {
     createPosition: async (req, res, next) => {
         try {
             const PositionToAdd = await positionService.createPosition(req.body);
-            const {_id} = PositionToAdd;
+            const {_id, japaneseRequired} = PositionToAdd;
 
-            const applications = await applicationService.getApplicationsByParams({
-                level: req.body.level,
-                categories: req.body.category,
-                japaneseKnowledge: req.body.japaneseRequired
-            });
+            let applications;
+            switch (japaneseRequired) {
+                case false:
+                    applications = await applicationService.getApplicationsByParams({
+                        level: req.body.level,
+                        categories: req.body.category
+                    });
+                    break;
+                case true:
+                    applications = await applicationService.getApplicationsByParams({
+                        level: req.body.level,
+                        categories: req.body.category,
+                        japaneseKnowledge: req.body.japaneseRequired
+                    });
+                    break;
+            }
+
 
             const newPositionUrl = `${NEW_POSITION_URL}${_id}`;
 
-                await applications.map(app => {
-                    console.log(app.email);
-                    sendEmail(app.email, ADDED_POSITION, {newPositionUrl});
-                });
+            await applications.map(app => {
+                console.log(app.email);
+                sendEmail(app.email, ADDED_POSITION, {newPositionUrl});
+            });
 
             res.sendStatus(201);
             res.json(PositionToAdd);
@@ -72,12 +83,24 @@ module.exports = {
         try {
             const {position_id} = req.params;
             const deletedPosition = await positionService.deletePositionById(position_id);
+            const {japaneseRequired} = deletedPosition;
 
-            const applications = await applicationService.getApplicationsByParams({
-                level: deletedPosition.level,
-                categories: deletedPosition.category,
-                japaneseKnowledge: deletedPosition.japaneseRequired = true? deletedPosition.japaneseRequired = boolean : false,
-            });
+            let applications;
+            switch (japaneseRequired) {
+                case false:
+                    applications = await applicationService.getApplicationsByParams({
+                        level: req.body.level,
+                        categories: req.body.category
+                    });
+                    break;
+                case true:
+                    applications = await applicationService.getApplicationsByParams({
+                        level: req.body.level,
+                        categories: req.body.category,
+                        japaneseKnowledge: req.body.japaneseRequired
+                    });
+                    break;
+            }
 
             console.log(applications);
 
