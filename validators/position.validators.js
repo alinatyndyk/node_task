@@ -16,6 +16,12 @@ const positionBodyValidator = Joi.object({
     japaneseRequired: japaneseRequiredValidator.required(),
 })
 
+const positionToPatch = Joi.object({
+    japaneseRequired: japaneseRequiredValidator,
+    description: descriptionValidator
+})
+
 module.exports = {
-    positionBodyValidator
+    positionBodyValidator,
+    positionToPatch
 }

@@ -83,26 +83,30 @@ module.exports = {
         try {
             const {position_id} = req.params;
             const deletedPosition = await positionService.deletePositionById(position_id);
+            console.log(deletedPosition);
             const {japaneseRequired} = deletedPosition;
+            console.log(japaneseRequired);
 
             let applications;
             switch (japaneseRequired) {
                 case false:
                     applications = await applicationService.getApplicationsByParams({
-                        level: req.body.level,
-                        categories: req.body.category
+                        level: deletedPosition.level,
+                        categories: deletedPosition.category
                     });
+                    console.log(applications, 'in false');
                     break;
                 case true:
                     applications = await applicationService.getApplicationsByParams({
-                        level: req.body.level,
-                        categories: req.body.category,
-                        japaneseKnowledge: req.body.japaneseRequired
+                        level: deletedPosition.level,
+                        categories: deletedPosition.category,
+                        japaneseKnowledge: deletedPosition.japaneseRequired
                     });
+                    console.log(applications, 'in true');
                     break;
             }
 
-            console.log(applications);
+            console.log(applications, 'before await');
 
             await applications.map(app => {
                 console.log(app.email);

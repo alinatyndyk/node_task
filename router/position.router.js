@@ -23,7 +23,7 @@ positionRouter.post('/',
 
 positionRouter.patch('/:position_id',
     commonMldwr.validIdMiddleware('_id'),
-    positionMldwr.isPositionBodyValid('positionBodyValidator'),
+    positionMldwr.isPositionBodyValid('positionToPatch'),
     positionController.updatePositionById
 )
 

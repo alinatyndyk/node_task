@@ -14,6 +14,14 @@ const applicantBodyValidator = Joi.object({
     level: levelValidator.required()
 })
 
+const applicantToSetValidator = Joi.object({
+    email: emailValidator,
+    categories: categoriesValidator,
+    japaneseKnowledge: japaneseKnowledgeValidator,
+    level: levelValidator
+})
+
 module.exports = {
-    applicantBodyValidator
+    applicantBodyValidator,
+    applicantToSetValidator
 }

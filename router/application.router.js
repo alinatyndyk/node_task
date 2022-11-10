@@ -22,7 +22,7 @@ applicationRouter.post('/',
 
 applicationRouter.put('/:application_id',
     commonMldwr.validIdMiddleware('_id'),
-    applicationMldwr.isApplicationBodyValid('applicantBodyValidator'),
+    applicationMldwr.isApplicationBodyValid('applicantToSetValidator'),
     applicationController.updateApplicationById
 )
 
