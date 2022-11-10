@@ -1,20 +1,19 @@
 const {positionService, applicationService} = require("../services");
 const {sendEmail} = require("../services/mailer.service");
 const {DELETED_POSITION, ADDED_POSITION} = require("../constants/email.action.enum");
-const {ApiError} = require("../errors");
 const {NEW_POSITION_URL} = require("../configs/configs");
+const {boolean} = require("joi");
 
 module.exports = {
 
     getPositions: async (req, res, next) => {
         try {
             const positions = await positionService.getPositions();
-            //todo check the error
 
             res.json(positions);
             next();
         } catch (e) {
-            next(new ApiError('Route not found', 400));
+            next();
         }
     },
 
@@ -42,11 +41,11 @@ module.exports = {
             });
 
             const newPositionUrl = `${NEW_POSITION_URL}${_id}`;
-            console.log(newPositionUrl);
 
-            await applications.map(app => {
-                sendEmail(app.email, ADDED_POSITION, {newPositionUrl});
-            });
+                await applications.map(app => {
+                    console.log(app.email);
+                    sendEmail(app.email, ADDED_POSITION, {newPositionUrl});
+                });
 
             res.sendStatus(201);
             res.json(PositionToAdd);
@@ -77,11 +76,13 @@ module.exports = {
             const applications = await applicationService.getApplicationsByParams({
                 level: deletedPosition.level,
                 categories: deletedPosition.category,
-                japaneseKnowledge: deletedPosition.japaneseRequired,
+                japaneseKnowledge: deletedPosition.japaneseRequired = true? deletedPosition.japaneseRequired = boolean : false,
             });
 
+            console.log(applications);
 
             await applications.map(app => {
+                console.log(app.email);
                 sendEmail(app.email, DELETED_POSITION);
             });
 

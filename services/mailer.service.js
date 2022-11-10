@@ -22,6 +22,7 @@ const sendEmail = async (userMail, emailTemplate, locals = {}) => {
     });
 
     const emailInfo = EmailTemplatesObj[emailTemplate];
+    console.log(locals);
 
     const html = await templateParser.render(emailInfo.templateName, locals)
 
